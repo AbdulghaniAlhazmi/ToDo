@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">ToDo</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="todo_title">Title</string>
+    <string name="done">Done</string>
+    <string name="extra_info">Extra Info</string>
+    <string name="enter_title">Enter Title</string>
+    <string name="details">Details</string>
+    <string name="extra_information">Extra Information</string>
 </resources>

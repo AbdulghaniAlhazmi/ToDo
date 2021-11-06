@@ -11,4 +11,6 @@ data class Todo(@PrimaryKey val id : UUID = UUID.randomUUID(),
                 var endDate : Date = Date(),
                 var extraInfo : String = "",
                 var isDone : Boolean = false, ) {
+
+
 }

@@ -8,15 +8,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//
-//        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
-//
-//        if (currentFragment == null){
-//            val fragment = 0()
-//            supportFragmentManager
-//                .beginTransaction()
-//                .add(R.id.fragment_container,fragment)
-//                .commit()
+
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+
+        if (currentFragment == null) {
+            val fragment = TodoFragment()
+            supportFragmentManager
+                .beginTransaction()
+                .add(R.id.fragment_container, fragment)
+                .commit()
 
         }
     }
+}

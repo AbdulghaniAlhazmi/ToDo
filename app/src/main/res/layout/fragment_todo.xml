@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".TodoFragment" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/todo_title"
-        android:textSize="24sp" />
+        android:text="@string/title" />
 
     <EditText
         android:id="@+id/todo_title"
@@ -21,42 +17,42 @@
         android:ems="10"
         android:hint="@string/enter_title"
         android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:autofillHints="" />
+        android:minHeight="48dp" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/textView2"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="@string/details"-->
-<!--        android:textSize="20sp" />-->
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/details" />
 
     <Button
         android:id="@+id/start_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="Start Date" />
+        android:text="Start Date" />
 
     <Button
         android:id="@+id/end_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="End Date" />
+        android:text="End Date" />
 
     <CheckBox
-        android:id="@+id/extra_check"
+        android:id="@+id/extra_info_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/extra_information" />
+        android:text="@string/extra_info" />
 
     <EditText
-        android:id="@+id/extra_info"
+        android:id="@+id/extra_infoText"
         android:layout_width="match_parent"
-        android:layout_height="424dp"
-        android:autofillHints=""
+        android:layout_height="wrap_content"
+        android:cursorVisible="false"
         android:ems="10"
-        android:hint="Extra info"
-        android:inputType="textPersonName" />
+        android:hint="@string/extra_information"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:visibility="invisible" />
 
     <CheckBox
         android:id="@+id/is_done"

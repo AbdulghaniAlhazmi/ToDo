@@ -1,14 +1,15 @@
-package com.example.todo
+package com.example.todo.TodoFragment
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import androidx.lifecycle.ViewModelProvider
 import com.example.todo.Database.Todo
+import com.example.todo.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class TodoFragment : Fragment() {
@@ -19,13 +20,14 @@ class TodoFragment : Fragment() {
     private lateinit var endDate : Button
     private lateinit var extraInfo : EditText
     private lateinit var extraInfoBox : CheckBox
-    private lateinit var isDone : CheckBox
+    private lateinit var isDone : FloatingActionButton
 
-
+private val todoFragmentViewModel by lazy { ViewModelProvider(this).get(TodoFragmentViewModel::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         todo = Todo()
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -38,7 +40,6 @@ class TodoFragment : Fragment() {
         endDate = view.findViewById(R.id.end_date)
         extraInfo = view.findViewById(R.id.extra_infoText)
         extraInfoBox = view.findViewById(R.id.extra_info_box)
-        isDone = view.findViewById(R.id.is_done)
 
 
 
@@ -48,9 +49,13 @@ class TodoFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        extraInfoBox.setOnClickListener{
-            if (extraInfoBox.isEnabled){
+        extraInfoBox.setOnCheckedChangeListener { buttonView, isChecked ->
+            if(isChecked) {
                 extraInfo.visibility = View.VISIBLE
+            }
+            if (!isChecked){
+                extraInfo.setText("")
+                extraInfo.visibility = View.INVISIBLE
             }
         }
 

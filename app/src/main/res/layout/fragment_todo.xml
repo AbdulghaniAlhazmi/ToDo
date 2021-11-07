@@ -1,62 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/title" />
+        android:paddingLeft="7dp"
+        android:paddingTop="7dp"
+        android:text="@string/title"
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/todo_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
         android:hint="@string/enter_title"
-        android:inputType="textPersonName"
-        android:minHeight="48dp" />
+        android:minHeight="48dp"
+        android:paddingLeft="7dp" /><![CDATA[
+    />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/details" />
-
-    <Button
-        android:id="@+id/start_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Start Date" />
-
-    <Button
-        android:id="@+id/end_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="End Date" />
+    ]]>
 
     <CheckBox
         android:id="@+id/extra_info_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/extra_info" />
+        android:gravity="left"
+        android:paddingTop="4dp"
+        android:text="@string/extra_info"
+        android:textSize="16sp" />
 
     <EditText
         android:id="@+id/extra_infoText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:cursorVisible="false"
-        android:ems="10"
+        android:gravity="left"
         android:hint="@string/extra_information"
-        android:inputType="textPersonName"
         android:minHeight="48dp"
         android:visibility="invisible" />
 
-    <CheckBox
-        android:id="@+id/is_done"
+    <Button
+        android:id="@+id/start_date"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/done" />
+        android:text="Created On"
+        android:textColor="#000000"
+        app:icon="@drawable/ic_baseline_date_range_24"
+        app:iconGravity="textStart"
+        app:iconPadding="8dp"
+        app:iconTint="#000000" />
+
+    <Button
+        android:id="@+id/end_date"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="End Date"
+        android:textColor="#000000"
+        app:icon="@drawable/ic_baseline_date_range_24"
+        app:iconGravity="textStart"
+        app:iconPadding="8dp"
+        app:iconTint="#000000" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/delete_btn"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:capitalize="none"
+        android:inputType="textCapWords"
+        android:text="@string/delete_task"
+        android:textColor="#000000"
+        app:icon="@drawable/ic_baseline_delete_24"
+        app:iconGravity="textStart"
+        app:iconPadding="8dp"
+        app:iconTint="#000000" />
+
 </LinearLayout>

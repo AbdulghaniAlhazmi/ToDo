@@ -6,38 +6,25 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/todo_title"
+    <CheckBox
+        android:id="@+id/is_done"
+        style="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/todo_date"
-        app:layout_constraintStart_toEndOf="@+id/is_done"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/todo_title"
+        app:layout_constraintEnd_toStartOf="@+id/todo_title"
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
     <TextView
-        android:id="@+id/todo_date"
-        android:layout_width="wrap_content"
+        android:id="@+id/todo_title"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="231dp"
-        android:textColor="#000000"
+        android:text="Title"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/is_done" />
-
-    <CheckBox
-        android:id="@+id/is_done"
-        style="@android:style/Widget.CompoundButton.CheckBox"
-        android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/todo_title"
-        app:layout_constraintEnd_toStartOf="@+id/todo_date"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/todo_title" />
+        app:layout_constraintStart_toEndOf="@+id/is_done"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

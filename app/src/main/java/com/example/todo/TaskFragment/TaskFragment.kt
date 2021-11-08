@@ -20,15 +20,15 @@ const val Date_KEY = "Date"
 class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
 
     private lateinit var task: Task
-    private lateinit var titleText : EditText
-    private lateinit var startDateBtn : Button
-    private lateinit var endDateBtn : Button
-    private lateinit var deleteBtn : Button
-    private lateinit var extraInfo : EditText
-    private lateinit var extraInfoBox : CheckBox
+    private lateinit var titleText: EditText
+    private lateinit var startDateBtn: Button
+    private lateinit var endDateBtn: Button
+    private lateinit var deleteBtn: Button
+    private lateinit var extraInfo: EditText
+    private lateinit var extraInfoBox: CheckBox
 
 
-private val taskFragmentViewModel by lazy { ViewModelProvider(this).get(TaskFragmentViewModel::class.java) }
+    private val taskFragmentViewModel by lazy { ViewModelProvider(this).get(TaskFragmentViewModel::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +53,7 @@ private val taskFragmentViewModel by lazy { ViewModelProvider(this).get(TaskFrag
                 startDateBtn.text = it?.startDate.toString()
                 endDateBtn.text = it?.endDate.toString()
             }
-        } )
+        })
     }
 
     override fun onCreateView(
@@ -86,7 +86,7 @@ private val taskFragmentViewModel by lazy { ViewModelProvider(this).get(TaskFrag
     override fun onStart() {
         super.onStart()
 
-        val titleTextWatcher = object : TextWatcher{
+        val titleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
@@ -101,17 +101,21 @@ private val taskFragmentViewModel by lazy { ViewModelProvider(this).get(TaskFrag
         titleText.addTextChangedListener(titleTextWatcher)
 
         extraInfoBox.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(isChecked) {
-
+            if (isChecked) {
                 extraInfo.visibility = View.VISIBLE
             }
-            if (!isChecked){
+            if (!isChecked) {
                 extraInfo.setText("")
                 extraInfo.visibility = View.INVISIBLE
             }
 
-            val extraInfoTextWatcher = object : TextWatcher{
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            val extraInfoTextWatcher = object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -128,15 +132,16 @@ private val taskFragmentViewModel by lazy { ViewModelProvider(this).get(TaskFrag
 
         endDateBtn.setOnClickListener {
             val args = Bundle()
-            args.putSerializable(Date_KEY,task.startDate)
+            args.putSerializable(Date_KEY, task.startDate)
 
             val datePicker = DatePickerFragment()
             datePicker.arguments = args
-            datePicker.setTargetFragment(this,0)
-            datePicker.show(this.parentFragmentManager,"Date Picker")
+            datePicker.setTargetFragment(this, 0)
+            datePicker.show(this.parentFragmentManager, "Date Picker")
         }
 
-        deleteBtn.setOnClickListener{
+        deleteBtn.setOnClickListener {
+
             taskFragmentViewModel.deleteTask(task)
 
         }

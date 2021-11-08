@@ -15,16 +15,12 @@
         android:textSize="20sp" />
 
     <EditText
-        android:id="@+id/todo_title"
+        android:id="@+id/task_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/enter_title"
         android:minHeight="48dp"
-        android:paddingLeft="7dp" /><![CDATA[
-    />
-
-    ]]>
-
+        android:paddingLeft="7dp" />
     <CheckBox
         android:id="@+id/extra_info_box"
         android:layout_width="match_parent"

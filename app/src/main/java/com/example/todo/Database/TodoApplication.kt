@@ -6,6 +6,6 @@ class TodoApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
-        TodoRepository.initialize(this)
+        TaskRepository.initialize(this)
     }
 }

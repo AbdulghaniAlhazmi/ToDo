@@ -2,7 +2,9 @@ package com.example.todo
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.todo.TodoFragment.TodoFragment
+import com.example.todo.TaskFragment.TaskFragment
+import com.example.todo.TaskListFragment.TaskFragmentList
+import com.example.todo.TaskListFragment.TaskListViewModel
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
 
         if (currentFragment == null) {
-            val fragment = TodoFragmentList()
+            val fragment = TaskFragmentList()
             supportFragmentManager
                 .beginTransaction()
                 .add(R.id.fragment_container, fragment)

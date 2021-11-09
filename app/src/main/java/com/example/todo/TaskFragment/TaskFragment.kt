@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.todo.Database.Task
 import com.example.todo.DatePickerFragment
@@ -36,6 +37,7 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         task = Task()
+
 
         val taskId = arguments?.getSerializable(KEY) as UUID
         taskFragmentViewModel.loadTask(taskId)
@@ -79,6 +81,9 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
                 endDateBtn.text = it?.endDate.toString()
             }
         })
+
+
+
     }
 
     override fun onCreateView(
@@ -112,6 +117,15 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
     override fun onStart() {
         super.onStart()
 
+        if (task.endDate.after(Calendar.getInstance().time)){
+            Toast.makeText(context,"Task Due Date is Passed",Toast.LENGTH_SHORT).show()
+        }
+
+        if (task.extraInfo.isNotBlank()){
+            extraInfoBox.isChecked = true
+            extraInfo.visibility = View.VISIBLE
+        }
+
         val titleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -130,10 +144,6 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
         isDone.setOnCheckedChangeListener { _, isChecked -> task.completed = isChecked }
 
         extraInfoBox.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (!extraInfo.text.isBlank()){
-                //extraInfo.visibility = View.VISIBLE
-            }
-
             if (isChecked) {
                 extraInfo.visibility = View.VISIBLE
             }
@@ -142,6 +152,7 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
                 extraInfo.setText("")
                 extraInfo.visibility = View.INVISIBLE
             }
+
 
 
             val extraInfoTextWatcher = object : TextWatcher {
@@ -164,10 +175,9 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
             extraInfo.addTextChangedListener(extraInfoTextWatcher)
         }
 
-
         endDateBtn.setOnClickListener {
             val args = Bundle()
-            args.putSerializable(Date_KEY, task.startDate)
+            args.putSerializable(Date_KEY, task.endDate)
 
             val datePicker = DatePickerFragment()
             datePicker.arguments = args
@@ -181,6 +191,7 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
             activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)?.commit()
         }
+
 
     }
 

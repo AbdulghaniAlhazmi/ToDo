@@ -10,7 +10,7 @@ import java.util.*
 data class Task(@PrimaryKey val id : UUID = UUID.randomUUID(),
                 var taskTitle : String="",
                 var startDate : Date = Date(),
-                var endDate : Date = Date(),
+                var endDate : Date = Date() ,
                 var extraInfo : String="",
                 var completed : Boolean = false, ) {
 

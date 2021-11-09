@@ -95,19 +95,20 @@ class TaskFragmentList : Fragment() {
             val fragment = TaskFragment()
             itemView.setOnClickListener(this)
             isDoneBox.setOnCheckedChangeListener { buttonView, isChecked ->
-                if (isChecked) {
+                if (isChecked){
                     taskTitle.paintFlags = taskTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-
+                    //fragment.isDone.isChecked
                     task.completed = true
-                } else {
-
+                }
+                else{
+                    //fragment.isDone.isChecked = false
                     taskTitle.typeface = Typeface.SANS_SERIF
                 }
             }
         }
 
 
-        fun bind(task: Task) {
+        fun bind(task: Task){
             this.task = task
             taskTitle.text = this.task.taskTitle
             isDoneBox.isChecked = task.completed
@@ -139,7 +140,6 @@ class TaskFragmentList : Fragment() {
             val task = tasks[position]
             holder.bind(task)
         }
-
         override fun getItemCount() = tasks.size
     }
 

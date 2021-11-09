@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.Database.Task
 import com.example.todo.R
 import com.example.todo.TaskFragment.TaskFragment
+import android.graphics.Paint
+import android.graphics.Typeface
+
 
 const val KEY = "1"
 
@@ -27,6 +30,7 @@ class TaskFragmentList : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -84,17 +88,29 @@ class TaskFragmentList : Fragment() {
         View.OnClickListener {
 
         private lateinit var task: Task
-        private val isDone: CheckBox = itemView.findViewById(R.id.is_done)
+        private val isDoneBox: CheckBox = itemView.findViewById(R.id.isDone)
         private val taskTitle: TextView = itemView.findViewById(R.id.task_title)
 
         init {
+            val fragment = TaskFragment()
             itemView.setOnClickListener(this)
+            isDoneBox.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) {
+                    taskTitle.paintFlags = taskTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+
+                    task.completed = true
+                } else {
+
+                    taskTitle.typeface = Typeface.SANS_SERIF
+                }
+            }
         }
+
 
         fun bind(task: Task) {
             this.task = task
             taskTitle.text = this.task.taskTitle
-            isDone.isChecked = this.task.isDone
+            isDoneBox.isChecked = task.completed
         }
 
         override fun onClick(v: View?) {
@@ -108,7 +124,6 @@ class TaskFragmentList : Fragment() {
                     ?.replace(R.id.fragment_container, fragment)
                     ?.addToBackStack(null)?.commit()
             }
-
         }
 
     }

@@ -12,7 +12,6 @@ data class Task(@PrimaryKey val id : UUID = UUID.randomUUID(),
                 var startDate : Date = Date(),
                 var endDate : Date = Date(),
                 var extraInfo : String="",
-                var isDone : Boolean = false, ) {
-
+                var completed : Boolean = false, ) {
 
 }

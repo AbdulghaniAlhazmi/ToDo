@@ -1,10 +1,12 @@
 package com.example.todo.TaskListFragment
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.example.todo.Database.Task
 import com.example.todo.Database.TaskRepository
+import java.util.*
 import java.util.concurrent.Executors
 
 private val executor = Executors.newSingleThreadExecutor()
@@ -19,6 +21,11 @@ class TaskListViewModel : ViewModel() {
         taskRepository.addTask(task)
     }
 
+    fun updateCompleted(completed : Boolean?, id : UUID){
+        executor.execute {
+            taskRepository.updateCompleted(completed,id)
+        }
+    }
 
     fun deleteTask(task: Task) {
         executor.execute {

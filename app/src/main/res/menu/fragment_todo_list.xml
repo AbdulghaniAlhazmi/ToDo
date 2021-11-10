@@ -10,7 +10,8 @@
         <menu>
             <item
                 android:id="@+id/delete_all"
-                android:title="Delete All" />
+                android:title="Delete All"
+                app:showAsAction="ifRoom" />
             <item android:title="Delete Completed" />
         </menu>
     </item>

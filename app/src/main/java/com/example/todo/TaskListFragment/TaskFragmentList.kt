@@ -1,5 +1,8 @@
 package com.example.todo.TaskListFragment
 
+import android.app.AlertDialog
+import android.content.Context
+import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
@@ -19,6 +22,7 @@ import android.text.format.DateFormat
 import android.widget.Button
 import android.widget.Toast
 import androidx.lifecycle.LiveData
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.example.todo.Database.TaskDao
@@ -60,7 +64,7 @@ class TaskFragmentList : Fragment() {
                     ?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)?.commit()
                 true
             }
-            R.id.delete_all ->{
+            R.id.delete_all -> {
 
                 true
             }
@@ -68,7 +72,6 @@ class TaskFragmentList : Fragment() {
         }
 
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,6 +83,7 @@ class TaskFragmentList : Fragment() {
         taskRcView = view.findViewById(R.id.todo_rc_view)
         taskRcView.layoutManager = LinearLayoutManager(context)
 
+
         return view
     }
 
@@ -88,6 +92,7 @@ class TaskFragmentList : Fragment() {
         taskListViewModel.taskLiveData.observe(viewLifecycleOwner, Observer {
             updateUI(it)
         })
+
     }
 
     private fun updateUI(tasks: List<Task>) {
@@ -108,26 +113,23 @@ class TaskFragmentList : Fragment() {
         private lateinit var task: Task
         private val isDoneBox: CheckBox = itemView.findViewById(R.id.isDone)
         private val taskTitle: TextView = itemView.findViewById(R.id.task_title)
-        private val dueDate : Button = itemView.findViewById(R.id.due_date)
+        private val dueDate: Button = itemView.findViewById(R.id.due_date)
 
         init {
-            val fragment = TaskFragment()
+
             itemView.setOnClickListener(this)
-            itemView.setOnLongClickListener {
-                taskListViewModel.deleteTask(task)
-                true
-            }
 
-
-            isDoneBox.setOnCheckedChangeListener { buttonView, isChecked ->
-                if (isChecked){
+            isDoneBox.setOnCheckedChangeListener {
+                    buttonView, isChecked ->
+                if (isChecked) {
                     taskTitle.paintFlags = taskTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                }
-                else{
-                    taskTitle.paintFlags = taskTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-                }
 
+                } else {
+                    taskTitle.paintFlags = taskTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                    //taskListViewModel.updateCompleted(!isChecked, task.id)
+                }
             }
+
         }
 
 
@@ -136,7 +138,6 @@ class TaskFragmentList : Fragment() {
             taskTitle.text = this.task.taskTitle
             isDoneBox.isChecked = task.completed
             dueDate.text = DateFormat.format(DATE_FORMAT, task.endDate).toString()
-
 
             if (task.startDate == task.endDate){
                 dueDate.visibility = View.INVISIBLE
@@ -153,9 +154,18 @@ class TaskFragmentList : Fragment() {
 
         }
 
+
         override fun onClick(v: View?) {
             val args = Bundle()
             args.putSerializable(KEY, task.id)
+
+            if (isDoneBox.isChecked){
+                taskListViewModel.updateCompleted(true, task.id)
+            }
+            else
+            {
+                taskListViewModel.updateCompleted(false, task.id)
+            }
 
             if (v == itemView) {
                 val fragment = TaskFragment()

@@ -26,6 +26,10 @@ class TaskRepository private constructor(context: Context){
         return taskDao.getTask(id)
     }
 
+    fun updateCompleted(completed : Boolean?, id : UUID){
+        return taskDao.updateCompleted(completed,id)
+    }
+
     fun updateTask (task: Task){
         return taskDao.updateTask(task)
     }

@@ -21,7 +21,6 @@ class TaskRepository private constructor(context: Context){
     private val taskDao = database.taskDao()
 
     fun getAllTask(): LiveData<List<Task>> = taskDao.getAllTask()
-//    fun deleteAll() : LiveData<List<Task>> = taskDao.deleteAll()
 
     fun getTask(id : UUID) : LiveData<Task?> {
         return taskDao.getTask(id)

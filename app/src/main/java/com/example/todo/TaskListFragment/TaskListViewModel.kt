@@ -5,6 +5,9 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.example.todo.Database.Task
 import com.example.todo.Database.TaskRepository
+import java.util.concurrent.Executors
+
+private val executor = Executors.newSingleThreadExecutor()
 
 class TaskListViewModel : ViewModel() {
 
@@ -12,15 +15,14 @@ class TaskListViewModel : ViewModel() {
     val taskLiveData = taskRepository.getAllTask()
 
 
-    fun addTask(task: Task){
+    fun addTask(task: Task) {
         taskRepository.addTask(task)
     }
 
-//    fun deleteAll(task: Task){
-//        taskRepository.deleteAll()
-//    }
 
-
-
-
+    fun deleteTask(task: Task) {
+        executor.execute {
+            taskRepository.deleteTask(task)
+        }
+    }
 }

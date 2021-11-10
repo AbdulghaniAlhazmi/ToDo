@@ -20,7 +20,7 @@ import java.util.*
 
 const val Date_KEY = "Date"
 private const val DATE_FORMAT = "EEE, MMM, dd"
-
+var x : Boolean = false
 class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
 
     private lateinit var task: Task
@@ -62,7 +62,6 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
             }
             else -> super.onOptionsItemSelected(item)
         }
-
     }
 
 
@@ -79,7 +78,7 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
                 isDone.isChecked = it?.completed == true
                 extraInfoBox.isChecked = it?.extraInfoBox == true
                 startDateBtn.text = it?.startDate.toString()
-                endDateBtn.text = it?.endDate.toString()
+                endDateBtn.text = "Add Due Date"
             }
         })
 
@@ -104,12 +103,6 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
         extraInfoBox = view.findViewById(R.id.extra_info_box)
         deleteBtn = view.findViewById(R.id.delete_btn)
         isDone = view.findViewById(R.id.isDone)
-        startDateBtn.apply {
-            text = DateFormat.format(DATE_FORMAT, task.startDate).toString()
-        }
-        endDateBtn.apply {
-            text = DateFormat.format(DATE_FORMAT, task.endDate).toString()
-        }
     }
 
 
@@ -135,6 +128,7 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
         }
 
         titleText.addTextChangedListener(titleTextWatcher)
+
 
         isDone.setOnCheckedChangeListener { _, isChecked -> task.completed = isChecked }
 
@@ -196,11 +190,14 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
         var dateString = DateFormat.format(DATE_FORMAT, task.endDate).toString()
         endDateBtn.text = dateString
 
-
         task.startDate
         dateString = DateFormat.format(DATE_FORMAT, task.startDate).toString()
         startDateBtn.text = dateString
 
+    }
+
+    override fun onStop() {
+        super.onStop()
 
     }
 

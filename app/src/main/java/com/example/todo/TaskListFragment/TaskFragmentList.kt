@@ -17,7 +17,9 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.text.format.DateFormat
 import android.widget.Button
+import android.widget.Toast
 import androidx.lifecycle.LiveData
+import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.example.todo.Database.TaskDao
 import com.example.todo.Database.TaskDatabase
@@ -111,15 +113,18 @@ class TaskFragmentList : Fragment() {
         init {
             val fragment = TaskFragment()
             itemView.setOnClickListener(this)
+            itemView.setOnLongClickListener {
+                taskListViewModel.deleteTask(task)
+                true
+            }
+
+
             isDoneBox.setOnCheckedChangeListener { buttonView, isChecked ->
                 if (isChecked){
                     taskTitle.paintFlags = taskTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                    //fragment.isDone.isChecked
-                    task.completed = true
                 }
                 else{
-                    //fragment.isDone.isChecked = false
-                    taskTitle.typeface = Typeface.SANS_SERIF
+                    taskTitle.paintFlags = taskTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
                 }
 
             }

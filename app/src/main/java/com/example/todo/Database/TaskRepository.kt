@@ -1,6 +1,7 @@
 package com.example.todo.Database
 
 import android.content.Context
+import android.os.AsyncTask
 import androidx.lifecycle.LiveData
 import androidx.room.Room
 import java.util.*
@@ -14,17 +15,13 @@ class TaskRepository private constructor(context: Context){
     private val database : TaskDatabase = Room.databaseBuilder(
         context.applicationContext,
         TaskDatabase::class.java,
-        DATABASE_NAME,).build()
+        DATABASE_NAME,
+    ).build()
 
     private val taskDao = database.taskDao()
 
     fun getAllTask(): LiveData<List<Task>> = taskDao.getAllTask()
-//    fun getAllTaskByStartDate(date : Date): LiveData<List<Task>>{
-//        return todoDao.getAllTaskByStartDate(date)
-//    }
-//    fun getAllTaskByEndDate(date : Date): LiveData<List<Task>> {
-//        return todoDao.getAllTaskByEndDate(date)
-//    }
+//    fun deleteAll() : LiveData<List<Task>> = taskDao.deleteAll()
 
     fun getTask(id : UUID) : LiveData<Task?> {
         return taskDao.getTask(id)

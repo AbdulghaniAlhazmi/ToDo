@@ -1,5 +1,6 @@
 package com.example.todo.TaskListFragment
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.CheckBox
@@ -14,9 +15,19 @@ import com.example.todo.R
 import com.example.todo.TaskFragment.TaskFragment
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.text.format.DateFormat
+import android.widget.Button
+import androidx.lifecycle.LiveData
+import androidx.room.RoomDatabase
+import com.example.todo.Database.TaskDao
+import com.example.todo.Database.TaskDatabase
+import com.example.todo.Database.TaskRepository
+import java.util.*
 
 
 const val KEY = "1"
+private const val DATE_FORMAT = "EEE, MMM, dd"
+
 
 class TaskFragmentList : Fragment() {
 
@@ -47,8 +58,13 @@ class TaskFragmentList : Fragment() {
                     ?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)?.commit()
                 true
             }
+            R.id.delete_all ->{
+
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
+
     }
 
 
@@ -90,6 +106,7 @@ class TaskFragmentList : Fragment() {
         private lateinit var task: Task
         private val isDoneBox: CheckBox = itemView.findViewById(R.id.isDone)
         private val taskTitle: TextView = itemView.findViewById(R.id.task_title)
+        private val dueDate : Button = itemView.findViewById(R.id.due_date)
 
         init {
             val fragment = TaskFragment()
@@ -104,6 +121,7 @@ class TaskFragmentList : Fragment() {
                     //fragment.isDone.isChecked = false
                     taskTitle.typeface = Typeface.SANS_SERIF
                 }
+
             }
         }
 
@@ -112,6 +130,22 @@ class TaskFragmentList : Fragment() {
             this.task = task
             taskTitle.text = this.task.taskTitle
             isDoneBox.isChecked = task.completed
+            dueDate.text = DateFormat.format(DATE_FORMAT, task.endDate).toString()
+
+
+            if (task.startDate == task.endDate){
+                dueDate.visibility = View.INVISIBLE
+            }
+            else{
+                if (Calendar.getInstance().time.after(task.endDate)){
+                    dueDate.setTextColor(Color.parseColor("#ff0000"))
+                }
+                else{
+                    dueDate.setTextColor(Color.parseColor("#000000"))
+                }
+            }
+
+
         }
 
         override fun onClick(v: View?) {

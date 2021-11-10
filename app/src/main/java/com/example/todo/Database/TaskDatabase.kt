@@ -10,4 +10,5 @@ import androidx.room.TypeConverters
 abstract class TaskDatabase : RoomDatabase(){
 
     abstract fun taskDao():TaskDao
+
 }

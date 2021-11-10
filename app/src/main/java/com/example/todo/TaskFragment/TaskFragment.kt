@@ -3,6 +3,7 @@ package com.example.todo.TaskFragment
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.format.DateFormat
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Button
@@ -18,6 +19,7 @@ import com.example.todo.TaskListFragment.TaskFragmentList
 import java.util.*
 
 const val Date_KEY = "Date"
+private const val DATE_FORMAT = "EEE, MMM, dd"
 
 class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
 
@@ -52,8 +54,6 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.update_task -> {
-                if (task.taskTitle.isBlank()){
-                }
                 taskFragmentViewModel.saveUpdate(task)
                 val fragment = TaskFragmentList()
                 activity?.supportFragmentManager?.beginTransaction()
@@ -69,20 +69,19 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        taskFragmentViewModel.taskLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        taskFragmentViewModel.taskLiveData.observe(viewLifecycleOwner, {
             it.let {
                 if (it != null) {
                     task = it
                 }
                 titleText.setText(it?.taskTitle)
                 extraInfo.setText(it?.extraInfo)
-                isDone.isChecked= it?.completed == true
+                isDone.isChecked = it?.completed == true
+                extraInfoBox.isChecked = it?.extraInfoBox == true
                 startDateBtn.text = it?.startDate.toString()
                 endDateBtn.text = it?.endDate.toString()
             }
         })
-
-
 
     }
 
@@ -106,10 +105,10 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
         deleteBtn = view.findViewById(R.id.delete_btn)
         isDone = view.findViewById(R.id.isDone)
         startDateBtn.apply {
-            text = task.startDate.toString()
+            text = DateFormat.format(DATE_FORMAT, task.startDate).toString()
         }
         endDateBtn.apply {
-            text = task.startDate.toString()
+            text = DateFormat.format(DATE_FORMAT, task.endDate).toString()
         }
     }
 
@@ -117,11 +116,7 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
     override fun onStart() {
         super.onStart()
 
-        if (task.endDate.after(Calendar.getInstance().time)){
-            Toast.makeText(context,"Task Due Date is Passed",Toast.LENGTH_SHORT).show()
-        }
-
-        if (task.extraInfo.isNotBlank()){
+        if (task.extraInfoBox){
             extraInfoBox.isChecked = true
             extraInfo.visibility = View.VISIBLE
         }
@@ -144,10 +139,11 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
         isDone.setOnCheckedChangeListener { _, isChecked -> task.completed = isChecked }
 
         extraInfoBox.setOnCheckedChangeListener { buttonView, isChecked ->
+
             if (isChecked) {
                 extraInfo.visibility = View.VISIBLE
             }
-            if (!isChecked) {
+            else {
                 if (extraInfo.text.isBlank())
                 extraInfo.setText("")
                 extraInfo.visibility = View.INVISIBLE
@@ -197,7 +193,14 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
 
     override fun onDateSelected(date: Date) {
         task.endDate = date
-        endDateBtn.text = date.toString()
+        var dateString = DateFormat.format(DATE_FORMAT, task.endDate).toString()
+        endDateBtn.text = dateString
+
+
+        task.startDate
+        dateString = DateFormat.format(DATE_FORMAT, task.startDate).toString()
+        startDateBtn.text = dateString
+
 
     }
 

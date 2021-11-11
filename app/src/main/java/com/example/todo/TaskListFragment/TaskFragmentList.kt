@@ -1,38 +1,27 @@
 package com.example.todo.TaskListFragment
 
-import android.app.AlertDialog
-import android.content.Context
-import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
 import android.os.Bundle
+import android.text.format.DateFormat
 import android.view.*
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.Database.Task
 import com.example.todo.R
+import com.example.todo.TaskFragment.DATE_FORMAT
 import com.example.todo.TaskFragment.TaskFragment
-import android.graphics.Paint
-import android.graphics.Typeface
-import android.text.format.DateFormat
-import android.widget.Button
-import android.widget.Toast
-import androidx.lifecycle.LiveData
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.room.Database
-import androidx.room.RoomDatabase
-import com.example.todo.Database.TaskDao
-import com.example.todo.Database.TaskDatabase
-import com.example.todo.Database.TaskRepository
 import java.util.*
 
 
 const val KEY = "1"
-private const val DATE_FORMAT = "EEE, MMM, dd"
 
 
 class TaskFragmentList : Fragment() {
@@ -83,7 +72,6 @@ class TaskFragmentList : Fragment() {
         taskRcView = view.findViewById(R.id.todo_rc_view)
         taskRcView.layoutManager = LinearLayoutManager(context)
 
-
         return view
     }
 
@@ -126,13 +114,10 @@ class TaskFragmentList : Fragment() {
 
                 } else {
                     taskTitle.paintFlags = taskTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-                    //taskListViewModel.updateCompleted(!isChecked, task.id)
                 }
             }
 
         }
-
-
         fun bind(task: Task){
             this.task = task
             taskTitle.text = this.task.taskTitle
@@ -153,7 +138,6 @@ class TaskFragmentList : Fragment() {
 
 
         }
-
 
         override fun onClick(v: View?) {
             val args = Bundle()

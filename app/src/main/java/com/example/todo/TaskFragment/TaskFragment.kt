@@ -1,26 +1,30 @@
 package com.example.todo.TaskFragment
 
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.todo.Database.Task
 import com.example.todo.DatePickerFragment
 import com.example.todo.R
 import com.example.todo.TaskListFragment.KEY
 import com.example.todo.TaskListFragment.TaskFragmentList
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.*
 
 const val Date_KEY = "Date"
-private const val DATE_FORMAT = "EEE, MMM, dd"
-var x : Boolean = false
+const val DATE_FORMAT = "MMM dd"
+
+
 class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
 
     private lateinit var task: Task
@@ -30,7 +34,8 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
     private lateinit var deleteBtn: Button
     private lateinit var extraInfo: EditText
     private lateinit var extraInfoBox: CheckBox
-    private lateinit var isDone : CheckBox
+    private lateinit var isDone: CheckBox
+    private lateinit var priorityBtn : Button
 
 
     private val taskFragmentViewModel by lazy { ViewModelProvider(this).get(TaskFragmentViewModel::class.java) }
@@ -40,7 +45,6 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
         setHasOptionsMenu(true)
         task = Task()
 
-
         val taskId = arguments?.getSerializable(KEY) as UUID
         taskFragmentViewModel.loadTask(taskId)
 
@@ -48,16 +52,21 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.fragment_todo,menu)
+        inflater.inflate(R.menu.fragment_todo, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.update_task -> {
-                taskFragmentViewModel.saveUpdate(task)
-                val fragment = TaskFragmentList()
-                activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)?.commit()
+                if (titleText.text.isEmpty()){
+                    Toast.makeText(context,"Enter Task Title",Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    taskFragmentViewModel.saveUpdate(task)
+                    val fragment = TaskFragmentList()
+                    activity?.supportFragmentManager?.beginTransaction()
+                        ?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)?.commit()
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -78,7 +87,21 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
                 isDone.isChecked = it?.completed == true
                 extraInfoBox.isChecked = it?.extraInfoBox == true
                 startDateBtn.text = it?.startDate.toString()
-                endDateBtn.text = "Add Due Date"
+                when {
+                    task.startDate == task.endDate -> {
+                        endDateBtn.text = "Add Due Date"
+                    }
+                    Calendar.getInstance().time.after(task.endDate) -> {
+                        endDateBtn.text =
+                            ("Overdue " + DateFormat.format(DATE_FORMAT, task.endDate).toString())
+                        endDateBtn.setTextColor((Color.parseColor("#ff0000")))
+                    }
+                    else -> {
+                        endDateBtn.text =
+                            ("Due " + DateFormat.format(DATE_FORMAT, task.endDate).toString())
+                    }
+                }
+
             }
         })
 
@@ -103,16 +126,12 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
         extraInfoBox = view.findViewById(R.id.extra_info_box)
         deleteBtn = view.findViewById(R.id.delete_btn)
         isDone = view.findViewById(R.id.isDone)
+        priorityBtn = view.findViewById(R.id.priorityBtn)
     }
-
 
     override fun onStart() {
         super.onStart()
 
-        if (task.extraInfoBox){
-            extraInfoBox.isChecked = true
-            extraInfo.visibility = View.VISIBLE
-        }
 
         val titleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -136,13 +155,11 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
 
             if (isChecked) {
                 extraInfo.visibility = View.VISIBLE
-            }
-            else {
-                if (extraInfo.text.isBlank())
-                extraInfo.setText("")
+            } else {
+                if (extraInfo.text.isEmpty())
+                    extraInfo.setText("")
                 extraInfo.visibility = View.INVISIBLE
             }
-
 
 
             val extraInfoTextWatcher = object : TextWatcher {
@@ -183,22 +200,65 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
         }
 
 
+
+        priorityBtn.setOnClickListener {
+            showPriorityDialog()
+        }
+
+    }
+
+    private fun showPriorityDialog(){
+        var selectedItemIndex = 0
+        val arrItem = arrayOf("High Priority","Medium Priority","Low Priority")
+        var selectedItem = arrItem[selectedItemIndex]
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Task Priority")
+            .setSingleChoiceItems(arrItem,selectedItemIndex){dialog , which ->
+                selectedItemIndex = which
+                selectedItem = arrItem[which]
+            }
+            .setPositiveButton("OK"){dialog , which ->
+                when (selectedItemIndex) {
+                    0 -> {
+                        priorityBtn.text = arrItem[selectedItemIndex]
+                        priorityBtn.setTextColor((Color.parseColor("#ff0000")))
+
+                    }
+                    1 -> {
+                        priorityBtn.text = arrItem[selectedItemIndex]
+                        priorityBtn.setTextColor((Color.parseColor("#000000")))
+                    }
+                    2 -> {
+                        priorityBtn.text = arrItem[selectedItemIndex]
+                        priorityBtn.setTextColor((Color.parseColor("#000000")))
+                    }
+                    else -> {
+                        priorityBtn.text = "Task Priority"
+                        priorityBtn.setTextColor((Color.parseColor("#000000")))
+                    }
+                }
+            }
+            .setNeutralButton("Cancel"){dialog , whick ->
+
+            }
+            .show()
+
     }
 
     override fun onDateSelected(date: Date) {
         task.endDate = date
-        var dateString = DateFormat.format(DATE_FORMAT, task.endDate).toString()
-        endDateBtn.text = dateString
+        endDateBtn.text = DateFormat.format(DATE_FORMAT, task.endDate).toString()
 
         task.startDate
-        dateString = DateFormat.format(DATE_FORMAT, task.startDate).toString()
-        startDateBtn.text = dateString
-
+        startDateBtn.text = DateFormat.format(DATE_FORMAT, task.startDate).toString()
     }
 
     override fun onStop() {
         super.onStop()
-
+        if (titleText.text.isEmpty()){
+            taskFragmentViewModel.deleteTask(task)
+        }
     }
 
 }

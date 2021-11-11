@@ -1,6 +1,5 @@
 package com.example.todo.TaskFragment
 
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -21,6 +20,7 @@ class TaskFragmentViewModel : ViewModel() {
         Transformations.switchMap(taskIdLiveData){
             taskRepository.getTask(it)
         }
+
 
     fun loadTask(taskId : UUID){
         taskIdLiveData.value = taskId

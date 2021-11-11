@@ -20,6 +20,7 @@ class TaskRepository private constructor(context: Context){
     private val taskDao = database.taskDao()
 
     fun getAllTask(): LiveData<List<Task>> = taskDao.getAllTask()
+    fun getAllTaskByEndDate(): LiveData<List<Task>> = taskDao.getAllTaskByEndDate()
 
     fun getTask(id : UUID) : LiveData<Task?> {
         return taskDao.getTask(id)

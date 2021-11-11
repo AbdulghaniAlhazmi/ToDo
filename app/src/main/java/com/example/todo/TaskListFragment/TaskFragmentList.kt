@@ -53,7 +53,11 @@ class TaskFragmentList : Fragment() {
                     ?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)?.commit()
                 true
             }
-            R.id.delete_all -> {
+            R.id.sortByDueDate -> {
+                taskListViewModel.sortByDueDate().observe(viewLifecycleOwner, Observer {
+                        updateUI(it)
+                })
+
 
                 true
             }

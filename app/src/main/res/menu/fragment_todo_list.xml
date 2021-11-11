@@ -3,7 +3,9 @@
     <item android:title="Sort">
         <menu>
             <item android:title="sort by start" />
-            <item android:title="sort by end" />
+            <item
+                android:id="@+id/sortByDueDate"
+                android:title="sort by end" />
         </menu>
     </item>
     <item android:title="Delete">

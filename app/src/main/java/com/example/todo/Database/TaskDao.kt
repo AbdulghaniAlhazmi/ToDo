@@ -11,6 +11,7 @@ interface TaskDao {
         @Query("SELECT * FROM Task")
         fun getAllTask(): LiveData<List<Task>>
 
+
         @Query("SELECT * FROM Task ORDER BY endDate")
         fun getAllTaskByEndDate(): LiveData<List<Task>>
 

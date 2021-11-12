@@ -31,6 +31,12 @@ class TaskListViewModel : ViewModel() {
         }
     }
 
+    fun saveUpdate(task: Task){
+        executor.execute {
+            taskRepository.updateTask(task)
+        }
+    }
+
     fun deleteTask(task: Task) {
         executor.execute {
             taskRepository.deleteTask(task)

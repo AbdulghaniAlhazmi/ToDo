@@ -22,7 +22,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.*
 
 const val Date_KEY = "Date"
-const val DATE_FORMAT = "MMM dd"
+const val DATE_FORMAT = "dd MMM"
 
 
 class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
@@ -34,9 +34,7 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
     private lateinit var deleteBtn: Button
     private lateinit var extraInfo: EditText
     private lateinit var extraInfoBox: CheckBox
-    private lateinit var isDone: CheckBox
-    private lateinit var priorityBtn : Button
-
+    lateinit var isDone: CheckBox
 
     private val taskFragmentViewModel by lazy { ViewModelProvider(this).get(TaskFragmentViewModel::class.java) }
 
@@ -58,10 +56,9 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.update_task -> {
-                if (titleText.text.isEmpty()){
-                    Toast.makeText(context,"Enter Task Title",Toast.LENGTH_SHORT).show()
-                }
-                else{
+                if (titleText.text.isEmpty()) {
+                    Toast.makeText(context, "Enter Task Title", Toast.LENGTH_SHORT).show()
+                } else {
                     taskFragmentViewModel.saveUpdate(task)
                     val fragment = TaskFragmentList()
                     activity?.supportFragmentManager?.beginTransaction()
@@ -105,6 +102,10 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
             }
         })
 
+        if (task.extraInfo.isNotEmpty()){
+            extraInfoBox.isChecked
+        }
+
     }
 
     override fun onCreateView(
@@ -126,12 +127,10 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
         extraInfoBox = view.findViewById(R.id.extra_info_box)
         deleteBtn = view.findViewById(R.id.delete_btn)
         isDone = view.findViewById(R.id.isDone)
-        priorityBtn = view.findViewById(R.id.priorityBtn)
     }
 
     override fun onStart() {
         super.onStart()
-
 
         val titleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -193,58 +192,21 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
         }
 
         deleteBtn.setOnClickListener {
-            taskFragmentViewModel.deleteTask(task)
-            val fragment = TaskFragmentList()
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)?.commit()
-        }
 
-
-
-        priorityBtn.setOnClickListener {
-            showPriorityDialog()
-        }
-
-    }
-
-    private fun showPriorityDialog(){
-        var selectedItemIndex = 0
-        val arrItem = arrayOf("High Priority","Medium Priority","Low Priority")
-        var selectedItem = arrItem[selectedItemIndex]
-
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Task Priority")
-            .setSingleChoiceItems(arrItem,selectedItemIndex){dialog , which ->
-                selectedItemIndex = which
-                selectedItem = arrItem[which]
-            }
-            .setPositiveButton("OK"){dialog , which ->
-                when (selectedItemIndex) {
-                    0 -> {
-                        priorityBtn.text = arrItem[selectedItemIndex]
-                        priorityBtn.setTextColor((Color.parseColor("#ff0000")))
-
-                    }
-                    1 -> {
-                        priorityBtn.text = arrItem[selectedItemIndex]
-                        priorityBtn.setTextColor((Color.parseColor("#000000")))
-                    }
-                    2 -> {
-                        priorityBtn.text = arrItem[selectedItemIndex]
-                        priorityBtn.setTextColor((Color.parseColor("#000000")))
-                    }
-                    else -> {
-                        priorityBtn.text = "Task Priority"
-                        priorityBtn.setTextColor((Color.parseColor("#000000")))
-                    }
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Delete ${titleText.text} Task ?")
+                .setPositiveButton("YES") { dialog, which ->
+                    taskFragmentViewModel.deleteTask(task)
+                    val fragment = TaskFragmentList()
+                    activity?.supportFragmentManager?.beginTransaction()
+                        ?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)?.commit()
                 }
-            }
-            .setNeutralButton("Cancel"){dialog , whick ->
+                .setNeutralButton("NO") { dialog, whick -> }
+                .show()
 
-            }
-            .show()
-
+        }
     }
+
 
     override fun onDateSelected(date: Date) {
         task.endDate = date
@@ -256,8 +218,11 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
 
     override fun onStop() {
         super.onStop()
-        if (titleText.text.isEmpty()){
+        if (titleText.text.isEmpty()) {
             taskFragmentViewModel.deleteTask(task)
+        }
+        else{
+
         }
     }
 

@@ -1,6 +1,7 @@
 package com.example.todo.Database
 
 import android.content.Context
+import android.os.AsyncTask
 import androidx.lifecycle.LiveData
 import androidx.room.Room
 import java.util.*
@@ -19,8 +20,32 @@ class TaskRepository private constructor(context: Context){
 
     private val taskDao = database.taskDao()
 
-    fun getAllTask(): LiveData<List<Task>> = taskDao.getAllTask()
-    fun getAllTaskByEndDate(): LiveData<List<Task>> = taskDao.getAllTaskByEndDate()
+    fun getAllTask(incomplete : Boolean): LiveData<List<Task>>{
+        return taskDao.getAllTask(incomplete = false)
+    }
+
+    fun deleteAll(){
+        AsyncTask.execute{
+            taskDao.deleteAll()
+        }
+    }
+
+    fun deleteIncomplete(){
+        AsyncTask.execute{
+            taskDao.deleteIncomplete()
+        }
+    }
+
+    fun deleteCompleted(){
+        AsyncTask.execute{
+            taskDao.deleteCompleted()
+        }
+    }
+
+    fun getAllCompleted(completed: Boolean?): LiveData<List<Task>>
+    {
+        return taskDao.getAllCompleted(complete = true)
+    }
 
     fun getTask(id : UUID) : LiveData<Task?> {
         return taskDao.getTask(id)

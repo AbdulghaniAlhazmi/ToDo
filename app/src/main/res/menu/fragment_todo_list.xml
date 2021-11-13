@@ -1,20 +1,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:title="Sort">
-        <menu>
-            <item android:title="sort by start" />
-            <item
-                android:id="@+id/sortByDueDate"
-                android:title="sort by end" />
-        </menu>
-    </item>
+    <item
+        android:id="@+id/completed_tasks"
+        android:title="Completed Tasks" />
     <item android:title="Delete">
         <menu>
             <item
                 android:id="@+id/delete_all"
                 android:title="Delete All"
                 app:showAsAction="ifRoom" />
-            <item android:title="Delete Completed" />
+            <item
+                android:id="@+id/delete_incomplete"
+                android:title="Delete Incomplete Tasks" />
         </menu>
     </item>
     <item

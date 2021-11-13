@@ -1,4 +1,4 @@
-package com.example.todo.TaskListFragment
+package com.example.todo.CompletedFragment
 
 import android.graphics.Color
 import android.graphics.Paint
@@ -6,94 +6,66 @@ import android.os.Bundle
 import android.text.format.DateFormat
 import android.util.Log
 import android.view.*
-import android.widget.*
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.CompoundButton
+import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.todo.CompletedFragment.CompletedFragment
 import com.example.todo.Database.Task
+import com.example.todo.MainActivity
 import com.example.todo.R
 import com.example.todo.TaskFragment.DATE_FORMAT
 import com.example.todo.TaskFragment.TaskFragment
+import com.example.todo.TaskListFragment.KEY
+import com.example.todo.TaskListFragment.TaskFragmentList
+import com.example.todo.TaskListFragment.TaskListViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.*
 
+class CompletedFragment : Fragment() {
 
-const val KEY = "1"
-
-var update : Boolean = false
-
-class TaskFragmentList : Fragment() {
     private lateinit var taskRcView: RecyclerView
     private var adapter: TaskAdapter? = TaskAdapter(emptyList())
 
-    private val taskListViewModel: TaskListViewModel by lazy {
-        ViewModelProvider(this).get(TaskListViewModel::class.java)
+    private val completedViewModel: CompletedFragmentViewModel by lazy {
+        ViewModelProvider(this).get(CompletedFragmentViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_completed, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
         return when (item.itemId) {
-            R.id.new_task -> {
-                val task = Task()
-                taskListViewModel.addTask(task)
-                val fragment = TaskFragment()
-                val args = Bundle()
-                args.putSerializable(KEY, task.id)
-                fragment.arguments = args
-                activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)?.commit()
-                true
-            }
             R.id.completed_tasks -> {
-                val fragment = CompletedFragment()
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Delete All Completed Tasks ?")
+                    .setPositiveButton("YES") { dialog, which ->
+                        completedViewModel.deleteCompleted()
+                    }
+                    .setNeutralButton("NO") { dialog, whick -> }
+                    .show()
+
+                val fragment = TaskFragmentList()
                 activity?.supportFragmentManager?.beginTransaction()
                     ?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)?.commit()
-
                 true
             }
-            R.id.delete_all ->{
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Delete All Tasks ?")
-                    .setPositiveButton("YES") { dialog, which ->
-                        taskListViewModel.deleteAll()
-                    }
-                    .setNeutralButton("NO") { dialog, whick -> }
-                    .show()
-                true
-            }
-            R.id.delete_all ->{
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Delete All Completed Tasks ?")
-                    .setPositiveButton("YES") { dialog, which ->
-                        taskListViewModel.deleteAll()
-                    }
-                    .setNeutralButton("NO") { dialog, whick -> }
-                    .show()
-                true
-            }
-            R.id.delete_incomplete -> {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Delete All Completed Tasks ?")
-                    .setPositiveButton("YES") { dialog, which ->
-                        taskListViewModel.deleteIncomplete()
-                    }
-                    .setNeutralButton("NO") { dialog, whick -> }
-                    .show()
-                true
-            }
-
             else -> super.onOptionsItemSelected(item)
         }
-
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -110,21 +82,18 @@ class TaskFragmentList : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        taskListViewModel.taskLiveData.observe(viewLifecycleOwner, Observer {
-            updateUI(it)
-        })
+        completedViewModel.taskLiveData.observe(
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer {
+                updateUI(it)
+            }
+        )
 
     }
 
     private fun updateUI(tasks: List<Task>) {
         adapter = TaskAdapter(tasks)
         taskRcView.adapter = adapter
-    }
-
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.fragment_todo_list, menu)
     }
 
 
@@ -144,12 +113,12 @@ class TaskFragmentList : Fragment() {
                 if (isChecked) {
                     taskTitle.paintFlags = taskTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                     dueDate.visibility = View.INVISIBLE
-                    itemView.visibility = View.GONE
+                    itemView.visibility = View.VISIBLE
                 } else {
                     taskTitle.paintFlags =
                         taskTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
                     dueDate.visibility = View.VISIBLE
-                    itemView.visibility = View.VISIBLE
+                    itemView.visibility = View.INVISIBLE
 
                 }
             }
@@ -162,27 +131,14 @@ class TaskFragmentList : Fragment() {
             isDoneBox.isChecked = task.completed
             dueDate.text = DateFormat.format(DATE_FORMAT, task.endDate).toString()
 
-            isDoneBox.setOnCheckedChangeListener(fun(_: CompoundButton, _:Boolean){
+            isDoneBox.setOnCheckedChangeListener(fun(_: CompoundButton, _: Boolean) {
                 if (isDoneBox.isChecked) {
-                    taskListViewModel.updateCompleted(true, task.id)
-                    Toast.makeText(requireContext(),"Task ${taskTitle.text} Completed",Toast.LENGTH_SHORT)
-                        .show()
+                    completedViewModel.updateCompleted(true, task.id)
                 } else {
-                    taskListViewModel.updateCompleted(false, task.id)
+                    completedViewModel.updateCompleted(false, task.id)
                 }
             })
 
-
-            if (task.startDate == task.endDate) {
-                dueDate.visibility = View.INVISIBLE
-            } else {
-                if (Calendar.getInstance().time.after(task.endDate)) {
-                    dueDate.setTextColor(Color.parseColor("#A70707"))
-
-                } else {
-                    dueDate.setTextColor(Color.parseColor("#000000"))
-                }
-            }
         }
 
         override fun onClick(v: View?) {
@@ -196,11 +152,15 @@ class TaskFragmentList : Fragment() {
                     ?.replace(R.id.fragment_container, fragment)
                     ?.addToBackStack(null)?.commit()
             }
+
         }
+
+
     }
 
 
-    private inner class TaskAdapter(var tasks: List<Task>) : RecyclerView.Adapter<TaskHolder>() {
+    private inner class TaskAdapter(var tasks: List<Task>) :
+        RecyclerView.Adapter<TaskHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskHolder {
             val view = layoutInflater.inflate(R.layout.list_todo, parent, false)
@@ -214,20 +174,4 @@ class TaskFragmentList : Fragment() {
 
         override fun getItemCount() = tasks.size
     }
-
-
-
-    override fun onStop() {
-        super.onStop()
-
-        Log.d("TTTT", update.toString())
-
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        Log.d("TTTT", update.toString())
-    }
-
 }

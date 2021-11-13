@@ -27,15 +27,14 @@
             android:id="@+id/task_title"
             android:layout_width="356dp"
             android:layout_height="48dp"
-            android:background="#000000"
+            android:background="#FFFFFF"
             android:hint="@string/enter_title"
             android:lines="1"
             android:minHeight="48dp"
             android:paddingLeft="7dp"
             android:text="@string/task_title"
-            android:textColor="#D0D0D0"
-            android:textColorHighlight="#AEAEAE"
-            android:textColorHint="#B7B7B7"
+            android:textColor="#000000"
+            android:textColorHint="#414141"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/isDone"
             app:layout_constraintTop_toTopOf="parent" />
@@ -60,15 +59,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:background="#000000"
+        android:background="#FFFFFF"
         android:gravity="left"
         android:hint="@string/extra_information"
         android:minHeight="48dp"
         android:paddingLeft="30dp"
         android:paddingTop="10dp"
-        android:textColor="#D0D0D0"
-        android:textColorHighlight="#AEAEAE"
-        android:textColorHint="#B7B7B7"
+        android:textColor="#000000"
+        android:textColorHint="#414141"
         android:visibility="visible" />
 
     <View
@@ -88,11 +86,11 @@
         android:paddingLeft="30dp"
         android:text="End Date"
         android:textAllCaps="false"
-        android:textColor="#D0D0D0"
+        android:textColor="#000000"
         android:visibility="visible"
         app:icon="@drawable/ic_baseline_date_range_24"
         app:iconPadding="8dp"
-        app:iconTint="#D0D0D0" />
+        app:iconTint="#000000" />
 
     <Button
         android:id="@+id/delete_btn"
@@ -126,7 +124,7 @@
         android:paddingLeft="30dp"
         android:text="Created On"
         android:textAllCaps="false"
-        android:textColor="#D0D0D0"
+        android:textColor="#000000"
         android:visibility="visible"
         app:iconPadding="8dp"
         app:iconTint="#000000" />

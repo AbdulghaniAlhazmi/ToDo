@@ -19,6 +19,7 @@
         <entry key="app/src/main/res/layout/fragment_todo_list.xml" value="0.12552083333333333" />
         <entry key="app/src/main/res/layout/list_todo.xml" value="0.375" />
         <entry key="app/src/main/res/layout/switch_item.xml" value="0.2557291666666667" />
+        <entry key="app/src/main/res/menu/fragment_completed.xml" value="0.12447916666666667" />
         <entry key="app/src/main/res/menu/fragment_todo.xml" value="0.2557291666666667" />
         <entry key="app/src/main/res/menu/fragment_todo_list.xml" value="0.2557291666666667" />
       </map>

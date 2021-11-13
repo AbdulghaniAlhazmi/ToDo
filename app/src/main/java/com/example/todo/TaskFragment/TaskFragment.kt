@@ -186,7 +186,7 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
     }
 
 
-    fun dialog(){
+    private fun dialog(){
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Delete ${titleText.text} Task ?")
             .setPositiveButton("YES") { dialog, which ->

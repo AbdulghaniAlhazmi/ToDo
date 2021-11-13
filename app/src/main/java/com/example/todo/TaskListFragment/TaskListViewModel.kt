@@ -7,21 +7,28 @@ import com.example.todo.Database.TaskRepository
 import java.util.*
 import java.util.concurrent.Executors
 
-private val executor = Executors.newSingleThreadExecutor()
+val executor = Executors.newSingleThreadExecutor()
 
 class TaskListViewModel : ViewModel() {
 
     val taskRepository = TaskRepository.get()
-    val taskLiveData = taskRepository.getAllTask()
+    val taskLiveData = taskRepository.getAllTask(incomplete = false)
+
+
+
+    fun deleteAll(){
+        return taskRepository.deleteAll()
+    }
+
+
+    fun deleteIncomplete(){
+        return taskRepository.deleteIncomplete()
+    }
+
 
 
     fun addTask(task: Task) {
         taskRepository.addTask(task)
-    }
-
-    fun sortByDueDate():LiveData<List<Task>>
-    {
-        return taskRepository.getAllTaskByEndDate()
     }
 
 

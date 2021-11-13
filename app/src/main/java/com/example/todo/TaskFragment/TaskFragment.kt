@@ -1,5 +1,6 @@
 package com.example.todo.TaskFragment
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
@@ -18,6 +19,7 @@ import com.example.todo.DatePickerFragment
 import com.example.todo.R
 import com.example.todo.TaskListFragment.KEY
 import com.example.todo.TaskListFragment.TaskFragmentList
+import com.example.todo.TaskListFragment.update
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.*
 
@@ -33,7 +35,6 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
     private lateinit var endDateBtn: Button
     private lateinit var deleteBtn: Button
     private lateinit var extraInfo: EditText
-    private lateinit var extraInfoBox: CheckBox
     lateinit var isDone: CheckBox
 
     private val taskFragmentViewModel by lazy { ViewModelProvider(this).get(TaskFragmentViewModel::class.java) }
@@ -60,9 +61,7 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
                     Toast.makeText(context, "Enter Task Title", Toast.LENGTH_SHORT).show()
                 } else {
                     taskFragmentViewModel.saveUpdate(task)
-                    val fragment = TaskFragmentList()
-                    activity?.supportFragmentManager?.beginTransaction()
-                        ?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)?.commit()
+                    backToList()
                 }
                 true
             }
@@ -71,6 +70,7 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
     }
 
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -81,9 +81,12 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
                 }
                 titleText.setText(it?.taskTitle)
                 extraInfo.setText(it?.extraInfo)
-                isDone.isChecked = it?.completed == true
-                extraInfoBox.isChecked = it?.extraInfoBox == true
+                if (update){
+                    isDone.isChecked = it?.completed == true
+                }
+               // isDone.isChecked = it?.completed == true
                 startDateBtn.text = it?.startDate.toString()
+                startDateBtn.text = "Created On " + DateFormat.format(DATE_FORMAT,task.startDate).toString()
                 when {
                     task.startDate == task.endDate -> {
                         endDateBtn.text = "Add Due Date"
@@ -102,9 +105,6 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
             }
         })
 
-        if (task.extraInfo.isNotEmpty()){
-            extraInfoBox.isChecked
-        }
 
     }
 
@@ -124,7 +124,6 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
         startDateBtn = view.findViewById(R.id.start_date)
         endDateBtn = view.findViewById(R.id.end_date)
         extraInfo = view.findViewById(R.id.extra_infoText)
-        extraInfoBox = view.findViewById(R.id.extra_info_box)
         deleteBtn = view.findViewById(R.id.delete_btn)
         isDone = view.findViewById(R.id.isDone)
     }
@@ -150,17 +149,6 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
 
         isDone.setOnCheckedChangeListener { _, isChecked -> task.completed = isChecked }
 
-        extraInfoBox.setOnCheckedChangeListener { buttonView, isChecked ->
-
-            if (isChecked) {
-                extraInfo.visibility = View.VISIBLE
-            } else {
-                if (extraInfo.text.isEmpty())
-                    extraInfo.setText("")
-                extraInfo.visibility = View.INVISIBLE
-            }
-
-
             val extraInfoTextWatcher = object : TextWatcher {
                 override fun beforeTextChanged(
                     s: CharSequence?,
@@ -179,7 +167,7 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
             }
 
             extraInfo.addTextChangedListener(extraInfoTextWatcher)
-        }
+
 
         endDateBtn.setOnClickListener {
             val args = Bundle()
@@ -192,21 +180,23 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
         }
 
         deleteBtn.setOnClickListener {
-
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Delete ${titleText.text} Task ?")
-                .setPositiveButton("YES") { dialog, which ->
-                    taskFragmentViewModel.deleteTask(task)
-                    val fragment = TaskFragmentList()
-                    activity?.supportFragmentManager?.beginTransaction()
-                        ?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)?.commit()
-                }
-                .setNeutralButton("NO") { dialog, whick -> }
-                .show()
+                    dialog()
 
         }
     }
 
+
+    fun dialog(){
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Delete ${titleText.text} Task ?")
+            .setPositiveButton("YES") { dialog, which ->
+                taskFragmentViewModel.deleteTask(task)
+                backToList()
+
+            }
+            .setNeutralButton("NO") { dialog, whick -> }
+            .show()
+    }
 
     override fun onDateSelected(date: Date) {
         task.endDate = date
@@ -218,12 +208,18 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
 
     override fun onStop() {
         super.onStop()
-        if (titleText.text.isEmpty()) {
+        if (titleText.text.isEmpty() || titleText.text.isBlank()) {
             taskFragmentViewModel.deleteTask(task)
         }
         else{
 
         }
+    }
+
+    fun backToList(){
+        val fragment = TaskFragmentList()
+        activity?.supportFragmentManager?.beginTransaction()
+            ?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)?.commit()
     }
 
 }

@@ -124,6 +124,7 @@ class TaskFragmentList : Fragment() {
 
                 }
             }
+
         }
 
         fun bind(task: Task) {
@@ -136,10 +137,10 @@ class TaskFragmentList : Fragment() {
                 dueDate.visibility = View.INVISIBLE
             } else {
                 if (Calendar.getInstance().time.after(task.endDate)) {
-                    dueDate.setTextColor(Color.parseColor("#ff0000"))
+                    dueDate.setTextColor(Color.parseColor("#A70707"))
 
                 } else {
-                    dueDate.setTextColor(Color.parseColor("#000000"))
+                    dueDate.setTextColor(Color.parseColor("#FFD0D0D0"))
 
                 }
             }
@@ -149,12 +150,6 @@ class TaskFragmentList : Fragment() {
             val args = Bundle()
             args.putSerializable(KEY, task.id)
 
-            if (isDoneBox.isChecked) {
-                taskListViewModel.updateCompleted(true, task.id)
-            } else {
-                taskListViewModel.updateCompleted(false, task.id)
-            }
-
             if (v == itemView) {
                 val fragment = TaskFragment()
                 fragment.arguments = args
@@ -163,9 +158,17 @@ class TaskFragmentList : Fragment() {
                     ?.addToBackStack(null)?.commit()
             }
 
+            if (isDoneBox.isChecked) {
+                taskListViewModel.updateCompleted(true, task.id)
+            } else {
+                taskListViewModel.updateCompleted(false, task.id)
+            }
+
         }
 
+
     }
+
 
     private inner class TaskAdapter(var tasks: List<Task>) : RecyclerView.Adapter<TaskHolder>() {
 

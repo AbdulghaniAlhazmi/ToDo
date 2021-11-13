@@ -18,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:buttonTint="#888888"
             app:layout_constraintBaseline_toBaselineOf="@+id/task_title"
             app:layout_constraintEnd_toStartOf="@+id/task_title"
             app:layout_constraintStart_toStartOf="parent" />
@@ -36,8 +37,7 @@
             android:textColorHint="#414141"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/isDone"
-            app:layout_constraintTop_toTopOf="parent"
-            android:autofillHints="" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -67,8 +67,7 @@
         android:paddingTop="10dp"
         android:textColor="#000000"
         android:textColorHint="#414141"
-        android:visibility="visible"
-        android:autofillHints="" />
+        android:visibility="visible" />
 
     <View
         android:layout_width="match_parent"

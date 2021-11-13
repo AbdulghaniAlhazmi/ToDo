@@ -17,7 +17,7 @@
         android:layout_width="35dp"
         android:layout_height="47dp"
         android:layout_marginStart="50dp"
-        android:buttonTint="#706F6F"
+        android:buttonTint="#888888"
         android:gravity="center_vertical"
         android:textAlignment="textEnd"
         app:layout_constraintBottom_toBottomOf="parent"

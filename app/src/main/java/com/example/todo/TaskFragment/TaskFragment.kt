@@ -94,7 +94,7 @@ class TaskFragment : Fragment(), DatePickerFragment.DatePickerCallBack {
                     Calendar.getInstance().time.after(task.endDate) -> {
                         endDateBtn.text =
                             ("Overdue " + DateFormat.format(DATE_FORMAT, task.endDate).toString())
-                        endDateBtn.setTextColor((Color.parseColor("#ff0000")))
+                        endDateBtn.setTextColor((Color.parseColor("#A70707")))
                     }
                     else -> {
                         endDateBtn.text =

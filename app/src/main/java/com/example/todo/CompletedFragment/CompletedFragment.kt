@@ -55,6 +55,7 @@ class CompletedFragment : Fragment() {
                 activity?.supportFragmentManager?.beginTransaction()
                     ?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)?.commit()
                 true
+
             }
             else -> super.onOptionsItemSelected(item)
         }
@@ -149,9 +150,7 @@ class CompletedFragment : Fragment() {
 
         }
 
-
     }
-
 
     private inner class TaskAdapter(var tasks: List<Task>) :
         RecyclerView.Adapter<TaskHolder>() {

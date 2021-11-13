@@ -16,29 +16,28 @@ class TaskFragmentViewModel : ViewModel() {
     private val executor = Executors.newSingleThreadExecutor()
 
 
-    var taskLiveData : LiveData<Task?> =
-        Transformations.switchMap(taskIdLiveData){
+    var taskLiveData: LiveData<Task?> =
+        Transformations.switchMap(taskIdLiveData) {
             taskRepository.getTask(it)
         }
 
 
-    fun loadTask(taskId : UUID){
+    fun loadTask(taskId: UUID) {
         taskIdLiveData.value = taskId
     }
 
-    fun saveUpdate(task: Task){
+    fun saveUpdate(task: Task) {
         executor.execute {
             taskRepository.updateTask(task)
         }
     }
 
-    fun deleteTask(task: Task){
+    fun deleteTask(task: Task) {
         executor.execute {
             taskRepository.deleteTask(task)
         }
 
     }
-
 
 
 }

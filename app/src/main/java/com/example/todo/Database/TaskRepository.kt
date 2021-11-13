@@ -10,9 +10,9 @@ import java.util.concurrent.Executors
 private const val DATABASE_NAME = "Task-Database1"
 private val executor = Executors.newSingleThreadExecutor()
 
-class TaskRepository private constructor(context: Context){
+class TaskRepository private constructor(context: Context) {
 
-    private val database : TaskDatabase = Room.databaseBuilder(
+    private val database: TaskDatabase = Room.databaseBuilder(
         context.applicationContext,
         TaskDatabase::class.java,
         DATABASE_NAME,
@@ -20,70 +20,67 @@ class TaskRepository private constructor(context: Context){
 
     private val taskDao = database.taskDao()
 
-    fun getAllTask(incomplete : Boolean): LiveData<List<Task>>{
+    fun getAllTask(incomplete: Boolean): LiveData<List<Task>> {
         return taskDao.getAllTask(incomplete = false)
     }
 
-    fun deleteAll(){
-        AsyncTask.execute{
+    fun deleteAll() {
+        AsyncTask.execute {
             taskDao.deleteAll()
         }
     }
 
-    fun deleteIncomplete(){
-        AsyncTask.execute{
+    fun deleteIncomplete() {
+        AsyncTask.execute {
             taskDao.deleteIncomplete()
         }
     }
 
-    fun deleteCompleted(){
-        AsyncTask.execute{
+    fun deleteCompleted() {
+        AsyncTask.execute {
             taskDao.deleteCompleted()
         }
     }
 
-    fun getAllCompleted(completed: Boolean?): LiveData<List<Task>>
-    {
-        return taskDao.getAllCompleted(complete = true)
+    fun getAllCompleted(completed: Boolean?): LiveData<List<Task>> {
+        return taskDao.getAllCompleted(completed = true)
     }
 
-    fun getTask(id : UUID) : LiveData<Task?> {
+    fun getTask(id: UUID): LiveData<Task?> {
         return taskDao.getTask(id)
     }
 
-    fun updateCompleted(completed : Boolean?, id : UUID){
-        return taskDao.updateCompleted(completed,id)
+    fun updateCompleted(completed: Boolean?, id: UUID) {
+        return taskDao.updateCompleted(completed, id)
     }
 
-    fun updateTask (task: Task){
+    fun updateTask(task: Task) {
         return taskDao.updateTask(task)
     }
 
-    fun addTask (task: Task) {
+    fun addTask(task: Task) {
         executor.execute {
             taskDao.addTask(task)
         }
     }
 
-    fun deleteTask (task: Task){
+    fun deleteTask(task: Task) {
         return taskDao.deleteTask(task)
     }
 
-    companion object{
+    companion object {
 
-        private var INSTANCE : TaskRepository? = null
+        private var INSTANCE: TaskRepository? = null
 
-        fun initialize (context: Context){
+        fun initialize(context: Context) {
 
-            if (INSTANCE == null)
-            {
+            if (INSTANCE == null) {
                 INSTANCE = TaskRepository(context)
             }
         }
 
-        fun get() : TaskRepository{
-            return INSTANCE ?:
-            throw IllegalStateException("Repository not initialized")
+        fun get(): TaskRepository {
+            return INSTANCE ?: throw IllegalStateException("Repository not initialized")
         }
 
     }

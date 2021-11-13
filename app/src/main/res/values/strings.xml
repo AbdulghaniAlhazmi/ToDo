@@ -9,4 +9,11 @@
     <string name="save">Save</string>
     <string name="delete_task">Delete Task</string>
     <string name="task_title">Task Title</string>
+    <string name="delete_all_completed_tasks">Delete All Completed Tasks</string>
+    <string name="completed_tasks">Completed Tasks</string>
+    <string name="delete_all">Delete All</string>
+    <string name="delete_incomplete_tasks">Delete Incomplete Tasks</string>
+    <string name="new_task">New Task</string>
+    <string name="delete">Delete</string>
+    <string name="_12_nov">12 Nov</string>
 </resources>

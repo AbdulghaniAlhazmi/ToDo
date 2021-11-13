@@ -1,30 +1,24 @@
 package com.example.todo.CompletedFragment
 
-import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
 import android.text.format.DateFormat
-import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.Database.Task
-import com.example.todo.MainActivity
 import com.example.todo.R
 import com.example.todo.TaskFragment.DATE_FORMAT
 import com.example.todo.TaskFragment.TaskFragment
 import com.example.todo.TaskListFragment.KEY
 import com.example.todo.TaskListFragment.TaskFragmentList
-import com.example.todo.TaskListFragment.TaskListViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.util.*
 
 class CompletedFragment : Fragment() {
 
@@ -84,7 +78,7 @@ class CompletedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         completedViewModel.taskLiveData.observe(
             viewLifecycleOwner,
-            androidx.lifecycle.Observer {
+            {
                 updateUI(it)
             }
         )

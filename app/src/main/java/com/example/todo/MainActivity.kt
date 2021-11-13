@@ -1,10 +1,8 @@
 package com.example.todo
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.todo.TaskFragment.TaskFragment
+import androidx.appcompat.app.AppCompatActivity
 import com.example.todo.TaskListFragment.TaskFragmentList
-import com.example.todo.TaskListFragment.TaskListViewModel
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

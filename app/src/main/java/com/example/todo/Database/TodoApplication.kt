@@ -2,7 +2,7 @@ package com.example.todo.Database
 
 import android.app.Application
 
-class TodoApplication: Application() {
+class TodoApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()

@@ -1,30 +1,28 @@
 package com.example.todo.TaskListFragment
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.todo.Database.Task
 import com.example.todo.Database.TaskRepository
 import java.util.*
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-val executor = Executors.newSingleThreadExecutor()
+val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
 class TaskListViewModel : ViewModel() {
 
-    val taskRepository = TaskRepository.get()
+    private val taskRepository = TaskRepository.get()
     val taskLiveData = taskRepository.getAllTask(incomplete = false)
 
 
-
-    fun deleteAll(){
+    fun deleteAll() {
         return taskRepository.deleteAll()
     }
 
 
-    fun deleteIncomplete(){
+    fun deleteIncomplete() {
         return taskRepository.deleteIncomplete()
     }
-
 
 
     fun addTask(task: Task) {
@@ -32,21 +30,10 @@ class TaskListViewModel : ViewModel() {
     }
 
 
-    fun updateCompleted(completed : Boolean?, id : UUID){
+    fun updateCompleted(completed: Boolean?, id: UUID) {
         executor.execute {
-            taskRepository.updateCompleted(completed,id)
+            taskRepository.updateCompleted(completed, id)
         }
     }
 
-    fun saveUpdate(task: Task){
-        executor.execute {
-            taskRepository.updateTask(task)
-        }
-    }
-
-    fun deleteTask(task: Task) {
-        executor.execute {
-            taskRepository.deleteTask(task)
-        }
-    }
 }

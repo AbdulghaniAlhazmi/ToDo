@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +22,7 @@ import java.util.*
 
 const val KEY = "1"
 
-var update : Boolean = false
+var update: Boolean = false
 
 class TaskFragmentList : Fragment() {
     private lateinit var taskRcView: RecyclerView
@@ -59,7 +58,7 @@ class TaskFragmentList : Fragment() {
 
                 true
             }
-            R.id.delete_all ->{
+            R.id.delete_all -> {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Delete All Tasks ?")
                     .setPositiveButton("YES") { dialog, which ->
@@ -69,19 +68,9 @@ class TaskFragmentList : Fragment() {
                     .show()
                 true
             }
-            R.id.delete_all ->{
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Delete All Completed Tasks ?")
-                    .setPositiveButton("YES") { dialog, which ->
-                        taskListViewModel.deleteAll()
-                    }
-                    .setNeutralButton("NO") { dialog, whick -> }
-                    .show()
-                true
-            }
             R.id.delete_incomplete -> {
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Delete All Completed Tasks ?")
+                    .setTitle("Delete All Incomplete Tasks ?")
                     .setPositiveButton("YES") { dialog, which ->
                         taskListViewModel.deleteIncomplete()
                     }
@@ -110,7 +99,7 @@ class TaskFragmentList : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        taskListViewModel.taskLiveData.observe(viewLifecycleOwner, Observer {
+        taskListViewModel.taskLiveData.observe(viewLifecycleOwner, {
             updateUI(it)
         })
 
@@ -162,10 +151,14 @@ class TaskFragmentList : Fragment() {
             isDoneBox.isChecked = task.completed
             dueDate.text = DateFormat.format(DATE_FORMAT, task.endDate).toString()
 
-            isDoneBox.setOnCheckedChangeListener(fun(_: CompoundButton, _:Boolean){
+            isDoneBox.setOnCheckedChangeListener(fun(_: CompoundButton, _: Boolean) {
                 if (isDoneBox.isChecked) {
                     taskListViewModel.updateCompleted(true, task.id)
-                    Toast.makeText(requireContext(),"Task ${taskTitle.text} Completed",Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        requireContext(),
+                        "Task ${taskTitle.text} Completed",
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 } else {
                     taskListViewModel.updateCompleted(false, task.id)
@@ -214,7 +207,6 @@ class TaskFragmentList : Fragment() {
 
         override fun getItemCount() = tasks.size
     }
-
 
 
     override fun onStop() {

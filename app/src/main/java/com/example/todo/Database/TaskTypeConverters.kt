@@ -7,23 +7,23 @@ import java.util.*
 class TodoTypeConverters {
 
     @TypeConverter
-    fun fromUUID(uuid: UUID?) : String?{
+    fun fromUUID(uuid: UUID?): String? {
         return uuid?.toString()
     }
 
     @TypeConverter
-    fun toUUID(uuid : String?): UUID?{
+    fun toUUID(uuid: String?): UUID? {
         return UUID.fromString(uuid)
     }
 
 
     @TypeConverter
-    fun fromStartDate(date : Date? ) : Long?{
+    fun fromStartDate(date: Date?): Long? {
         return date?.time
     }
 
     @TypeConverter
-    fun toStartDate(millisSinceEpoch : Long?) : Date?{
+    fun toStartDate(millisSinceEpoch: Long?): Date? {
         return millisSinceEpoch?.let { Date(it) }
     }
 

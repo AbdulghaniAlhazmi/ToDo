@@ -10,7 +10,7 @@ import java.util.*
 
 class DatePickerFragment : DialogFragment() {
 
-    interface DatePickerCallBack{
+    interface DatePickerCallBack {
 
         fun onDateSelected(date: Date)
     }
@@ -32,7 +32,7 @@ class DatePickerFragment : DialogFragment() {
 
         }
 
-        return DatePickerDialog(requireContext(),dateListener,year,month,day)
+        return DatePickerDialog(requireContext(), dateListener, year, month, day)
     }
 
 }

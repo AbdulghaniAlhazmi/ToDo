@@ -6,20 +6,19 @@ import com.example.todo.TaskListFragment.executor
 import java.util.*
 
 
-
 class CompletedFragmentViewModel : ViewModel() {
 
-private val taskRepository = TaskRepository.get()
+    private val taskRepository = TaskRepository.get()
     val taskLiveData = taskRepository.getAllCompleted(completed = true)
 
 
-    fun updateCompleted(completed : Boolean?, id : UUID){
+    fun updateCompleted(completed: Boolean?, id: UUID) {
         executor.execute {
-            taskRepository.updateCompleted(completed,id)
+            taskRepository.updateCompleted(completed, id)
         }
     }
 
-    fun deleteCompleted(){
+    fun deleteCompleted() {
         return taskRepository.deleteCompleted()
     }
 

@@ -6,14 +6,13 @@ import android.os.Bundle
 import android.text.format.DateFormat
 import android.util.Log
 import android.view.*
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.TextView
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.Database.Task
@@ -133,6 +132,15 @@ class TaskFragmentList : Fragment() {
             isDoneBox.isChecked = task.completed
             dueDate.text = DateFormat.format(DATE_FORMAT, task.endDate).toString()
 
+            isDoneBox.setOnCheckedChangeListener(fun(compoundButton: CompoundButton, b:Boolean){
+                if (isDoneBox.isChecked) {
+                    taskListViewModel.updateCompleted(true, task.id)
+                } else {
+                    taskListViewModel.updateCompleted(false, task.id)
+                }
+            })
+
+
             if (task.startDate == task.endDate) {
                 dueDate.visibility = View.INVISIBLE
             } else {
@@ -156,12 +164,6 @@ class TaskFragmentList : Fragment() {
                 activity?.supportFragmentManager?.beginTransaction()
                     ?.replace(R.id.fragment_container, fragment)
                     ?.addToBackStack(null)?.commit()
-            }
-
-            if (isDoneBox.isChecked) {
-                taskListViewModel.updateCompleted(true, task.id)
-            } else {
-                taskListViewModel.updateCompleted(false, task.id)
             }
 
         }
